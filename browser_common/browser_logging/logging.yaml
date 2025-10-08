@@ -1,0 +1,110 @@
+# browser-common logging configuration file
+# Supports multiple log formats and handler configurations
+
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  standard:
+    format: '%(asctime)s | %(name)s | %(levelname)-8s | %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  
+  detailed:
+    format: '%(asctime)s | %(name)s | %(levelname)-8s | %(filename)s:%(lineno)d | %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  
+  json:
+    class: logging_manager.JsonFormatter
+  
+  simple:
+    format: '%(levelname)s | %(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: standard
+    stream: ext://sys.stdout
+  
+  console_debug:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: detailed
+    stream: ext://sys.stdout
+  
+  file_info:
+    class: logging.handlers.RotatingFileHandler
+    filename: logs/browser_common_info.log
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+    level: INFO
+    formatter: standard
+    encoding: utf-8
+  
+  file_debug:
+    class: logging.handlers.RotatingFileHandler
+    filename: logs/browser_common_debug.log
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+    level: DEBUG
+    formatter: detailed
+    encoding: utf-8
+  
+  file_json:
+    class: logging.handlers.RotatingFileHandler
+    filename: logs/browser_common.json
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+    level: INFO
+    formatter: json
+    encoding: utf-8
+  
+  error_file:
+    class: logging.handlers.RotatingFileHandler
+    filename: logs/browser_common_error.log
+    maxBytes: 10485760  # 10MB
+    backupCount: 5
+    level: ERROR
+    formatter: detailed
+    encoding: utf-8
+
+loggers:
+  # Browser common module logger
+  browser_common:
+    level: INFO
+    handlers: [console, file_info, error_file]
+    propagate: false
+  
+  # Browser control module logger
+  browser_common.control:
+    level: DEBUG
+    handlers: [console_debug, file_debug, error_file]
+    propagate: false
+  
+  # Browser utils module logger
+  browser_common.utils:
+    level: INFO
+    handlers: [console, file_info, error_file]
+    propagate: false
+  
+  # Browser wrapper module logger
+  browser_common.wrapper:
+    level: INFO
+    handlers: [console, file_info, error_file]
+    propagate: false
+  
+  # Development environment logger
+  browser_common.dev:
+    level: DEBUG
+    handlers: [console_debug, file_debug, file_json]
+    propagate: false
+  
+  # Production environment logger
+  browser_common.prod:
+    level: WARNING
+    handlers: [console, file_info, error_file]
+    propagate: false
+
+root:
+  level: WARNING
+  handlers: [console, error_file]
