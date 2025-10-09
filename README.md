@@ -22,6 +22,25 @@ Browser-Flow is a modular browser automation solution that breaks down complex b
 - Python 3.13+
 - Poetry (package manager)
 
+### Environment Variables Configuration
+
+Currently supports DeepSeek and Qwen large language models. Please set the following environment variables:
+
+```bash
+# DeepSeek API Key
+export DEEPSEEK_API_KEY="your_deepseek_api_key"
+
+# Qwen API Key
+export AGENTQL_API_KEY="your_qwen_api_key"
+```
+
+Or configure in a `.env` file:
+
+```bash
+DEEPSEEK_API_KEY="your_deepseek_api_key"
+AGENTQL_API_KEY="your_qwen_api_key"
+```
+
 ### Installation Steps
 
 1. **Check Python Environment**

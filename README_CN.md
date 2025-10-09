@@ -23,6 +23,25 @@ Browser-Flow 是一个模块化的浏览器自动化解决方案，将复杂的�
 - Python 3.13+
 - Poetry（包管理器）
 
+### 环境变量配置
+
+目前支持 DeepSeek 和 Qwen 大模型，请设置以下环境变量：
+
+```bash
+# DeepSeek API 密钥
+export DEEPSEEK_API_KEY="your_deepseek_api_key"
+
+# Qwen API 密钥  
+export AGENTQL_API_KEY="your_qwen_api_key"
+```
+
+或者在 `.env` 文件中配置：
+
+```bash
+DEEPSEEK_API_KEY="your_deepseek_api_key"
+AGENTQL_API_KEY="your_qwen_api_key"
+```
+
 ### 安装步骤
 
 1. **检查Python环境**
