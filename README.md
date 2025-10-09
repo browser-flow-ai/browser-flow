@@ -42,6 +42,133 @@ Browser-Flow is a modular browser automation solution that breaks down complex b
    poetry add pydantic-ai
    ```
 
+## Usage
+
+Browser-Flow provides a simple and easy-to-use wrapper class that allows you to quickly start browser automation tasks.
+
+### Basic Usage
+
+#### Method 1: Using BrowserFlow Class
+
+```python
+import asyncio
+from browser_flow import BrowserFlow
+
+async def main():
+    # Create BrowserFlow instance
+    flow = BrowserFlow()
+    
+    try:
+        # Execute browser automation task
+        result = await flow.run("Open Baidu, then close Baidu", max_steps=5)
+        print(f"Execution result: {result}")
+    except Exception as e:
+        print(f"Execution error: {e}")
+    finally:
+        # Manually cleanup resources
+        await flow.close()
+
+# Run example
+asyncio.run(main())
+```
+
+#### Method 2: Using Convenience Function (Recommended)
+
+```python
+import asyncio
+from browser_flow import run_workflow
+
+async def main():
+    try:
+        # Use convenience function with automatic resource management
+        result = await run_workflow(
+            "Open https://books.toscrape.com/ and extract book price information", 
+            max_steps=10
+        )
+        print(f"Execution result: {result}")
+    except Exception as e:
+        print(f"Execution error: {e}")
+
+# Run example
+asyncio.run(main())
+```
+
+### Parameter Description
+
+- `instruction`: Browser automation instruction (string)
+- `max_steps`: Maximum execution steps (default: 10)
+- `session_id`: Optional session ID (auto-generated)
+
+### More Examples
+
+Check the [browser_flow/example.py](browser_flow/example.py) file for more usage examples.
+
+### Advanced Usage: Direct browser-control
+
+If you need more fine-grained control, you can use the `browser-control` module directly:
+
+```python
+import asyncio
+from browser_control.agent_hand import AgentHand
+from pydantic import BaseModel, Field
+
+# Define data extraction schema
+class BookSchema(BaseModel):
+    """Book information schema"""
+    title: str = Field(description="Book title")
+    price: str = Field(description="Book price")
+    rating: str = Field(description="Book rating")
+
+async def advanced_example():
+    """Advanced usage example"""
+    # Create AgentHand instance
+    agent = AgentHand("advanced_example")
+    
+    try:
+        await agent.init()
+        
+        # 1. Navigate to webpage
+        await agent.goto("https://books.toscrape.com/")
+        
+        # 2. Observe page elements
+        elements = await agent.observe("Find book titles and prices")
+        print(f"Found {len(elements)} elements")
+        
+        # 3. Extract information (text mode)
+        result = await agent.extract("Extract all book names, prices, and ratings")
+        print(f"Extraction result: {result}")
+        
+        # 4. Extract information (structured schema)
+        structured_result = await agent.extract({
+            "instruction": "Extract book information",
+            "output_schema": BookSchema
+        })
+        print(f"Structured extraction result: {structured_result}")
+        
+        # 5. Perform actions
+        await agent.act("click on the first book")
+        
+        # 6. Extract detailed information
+        details = await agent.extract("Extract book details")
+        print(f"Detailed information: {details}")
+        
+    except Exception as e:
+        print(f"Execution error: {e}")
+    finally:
+        await agent.close()
+
+# Run example
+asyncio.run(advanced_example())
+```
+
+### browser-control Core Methods
+
+- **`goto(url)`**: Navigate to specified URL
+- **`observe(instruction)`**: Observe page elements, returns actionable element list
+- **`extract(instruction)`**: Extract page information
+- **`extract(schema_dict)`**: Extract information using structured schema
+- **`act(instruction)`**: Execute browser actions (click, type, press keys, etc.)
+
 ## Key Features
 
 - 🚀 **Modular Design** - Each component runs independently, use as needed
