@@ -10,10 +10,10 @@ Browser-Flow is a modular browser automation solution that breaks down complex b
 
 ## Core Components
 
-- **[browser-common](browser-common)** - Core dependency library providing common browser operation interfaces
-- **[browser-control](/browser-control)** - LLM-powered intelligent browser operation engine
-- **[browser-flow](/browser-flow)** - Customizable browser workflow orchestration system
-- **[browser-wrapper](/browser-wrapper)** - Browser wrapper layer for A11y Tree access
+- **[browser-common](browser-common)** - Core dependency library providing common browser operation interfaces, serves as the overall dependency layer, currently mainly for LLM calls and logging
+- **[browser-control](/browser-control)** - LLM-powered intelligent browser operation engine, provides intelligent encapsulation of page operations, supporting clicks, key presses, input, scrolling, etc.
+- **[browser-flow](/browser-flow)** - Customizable browser workflow orchestration system, handles action orchestration and operation flow planning, as well as result aggregation
+- **[browser-wrapper](/browser-wrapper)** - Browser wrapper layer for A11y Tree access, provides web page operation encapsulation, ensuring stability during dynamic runtime and successful atree retrieval
 
 ## Quick Start
 

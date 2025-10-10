@@ -11,10 +11,10 @@ Browser-Flow 是一个模块化的浏览器自动化解决方案，将复杂的�
 
 ## 核心组件
 
-- **[browser-common](/browser-common)** - 基础依赖库，提供通用的浏览器操作接口
-- **[browser-control](/browser-control)** - 基于大语言模型的智能浏览器操作引擎
-- **[browser-flow](/browser-flow)** - 可定制的浏览器工作流编排系统
-- **[browser-wrapper](/browser-wrapper)** - 在保证浏览器能正常稳定工作的情况下，获取A11y Tree时的浏览器封装层
+- **[browser-common](/browser-common)** - 基础依赖库，提供通用的浏览器操作接口，是整体的依赖层，目前主要是大模型调用和日志。  
+- **[browser-control](/browser-control)** - 基于大语言模型的智能浏览器操作引擎，是对页面操作的智能封装，可以点击，按键，输入，滚动等。  
+- **[browser-flow](/browser-flow)** - 可定制的浏览器工作流编排系统，是动作编排和操作流的规划，以及结果的汇总。    
+- **[browser-wrapper](/browser-wrapper)** - 在保证浏览器能正常稳定工作的情况下，获取A11y Tree时的浏览器封装层，是对网页操作的封装，保证网页在动态运行中稳定，并且能成功获取到atree。
 
 ## 快速开始
 
