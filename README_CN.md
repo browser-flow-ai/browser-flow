@@ -32,14 +32,14 @@ Browser-Flow 是一个模块化的浏览器自动化解决方案，将复杂的�
 export DEEPSEEK_API_KEY="your_deepseek_api_key"
 
 # Qwen API 密钥  
-export AGENTQL_API_KEY="your_qwen_api_key"
+export DASHSCOPE_API_KEY="your_qwen_api_key"
 ```
 
 或者在 `.env` 文件中配置：
 
 ```bash
 DEEPSEEK_API_KEY="your_deepseek_api_key"
-AGENTQL_API_KEY="your_qwen_api_key"
+DASHSCOPE_API_KEY="your_qwen_api_key"
 ```
 
 ### 安装步骤

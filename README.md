@@ -31,14 +31,14 @@ Currently supports DeepSeek and Qwen large language models. Please set the follo
 export DEEPSEEK_API_KEY="your_deepseek_api_key"
 
 # Qwen API Key
-export AGENTQL_API_KEY="your_qwen_api_key"
+export DASHSCOPE_API_KEY="your_qwen_api_key"
 ```
 
 Or configure in a `.env` file:
 
 ```bash
 DEEPSEEK_API_KEY="your_deepseek_api_key"
-AGENTQL_API_KEY="your_qwen_api_key"
+DASHSCOPE_API_KEY="your_qwen_api_key"
 ```
 
 ### Installation Steps
