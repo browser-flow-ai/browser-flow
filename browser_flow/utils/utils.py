@@ -171,6 +171,8 @@ def generate_tools_description(tools: List[Any]) -> str:
     for tool in tools:
         # Get schema information safely
         schema_info = "No parameters"
+        
+        # Check if tool has args_schema attribute
         if hasattr(tool, 'args_schema') and tool.args_schema:
             try:
                 # For Pydantic models, get field information
@@ -181,6 +183,12 @@ def generate_tools_description(tools: List[Any]) -> str:
                         ensure_ascii=False)
                 else:
                     schema_info = str(tool.args_schema)
+            except Exception:
+                schema_info = "Failed to get parameter information"
+        # For StructuredTool, try to get schema from the tool itself
+        elif hasattr(tool, 'args') and tool.args:
+            try:
+                schema_info = str(tool.args)
             except Exception:
                 schema_info = "Failed to get parameter information"
 

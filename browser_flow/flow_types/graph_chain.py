@@ -42,29 +42,6 @@ Plan = PlanStepSchema
 PlanOutput = PlanOutputSchema
 ConditionalOutput = ConditionalOutputSchema
 
-
-class ReActState(BaseModel):
-    """ReAct state interface."""
-    session_id: str = Field(description="Session ID")
-    input: Optional[str] = Field(None, description="Input string")
-    plan: Optional[List[Plan]] = Field(None, description="Execution plan steps")
-    steps: Optional[List[Plan]] = Field(None, description="Steps that have been executed")
-    next_action: Optional[str] = Field(None, description="Next action to execute")
-    action_params: Optional[Dict[str, Any]] = Field(None, description="Action parameters")
-    execution_results: Optional[List[str]] = Field(None, description="Execution results")
-    done: bool = Field(description="Whether all tasks are completed")
-    error: Optional[str] = Field(None, description="Error message if any")
-    step_count: int = Field(description="Current step count")
-    max_steps: int = Field(description="Maximum number of steps")
-    thoughts: Optional[List[str]] = Field(None, description="Thoughts during execution")
-    current_a11ytree:  Optional[str] = Field(None, description="A11y Tree of the current page")
-    issues: Optional[List[str]] = Field(None, description="outputs of extract action")
-
-    
-    class Config:
-        extra = "allow"  # Allow additional fields like in TypeScript
-
-
 # Create structured output parsers
 plan_output_parser = PydanticOutputParser(pydantic_object=PlanOutputSchema)
 conditional_output_parser = PydanticOutputParser(pydantic_object=ConditionalOutputSchema)
