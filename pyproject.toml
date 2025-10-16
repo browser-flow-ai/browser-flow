@@ -48,6 +48,7 @@ dependencies = [
     "openai>=1.0.0",
     "nest-asyncio>=1.5.0",
     "pytest-asyncio>=0.21.0",
+    "trafilatura[all] (>=2.0.0,<3.0.0)",
 ]
 
 [project.scripts]
