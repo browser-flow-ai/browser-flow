@@ -18,7 +18,9 @@ else:
     from browser_common.llm.llm_deepseek import llm
 
 from browser_common.browser_logging import get_logger
+
 logger = get_logger("browser_flow.conditional_node", enable_file_logging=False)
+
 
 class ConditionalNode(BaseNode[SHState]):
     def __init__(self, tools=None):
@@ -29,13 +31,15 @@ class ConditionalNode(BaseNode[SHState]):
         return "CONDITIONAL_NODE"
 
     async def execute(self, state: SHState) -> dict:
+        logger.info(f" Conditional node is starting")
+
         step_count = state.step_count or 0
         max_steps = state.max_steps or 10
 
         # Check if maximum steps exceeded
         if step_count >= max_steps:
             error_msg = f"Maximum step limit reached: {max_steps}"
-            logger.warning(f"⚠️ {error_msg}")
+            logger.warning(f"{error_msg}")
             return {
                 "done": True,
                 "step_count": step_count,
@@ -44,13 +48,9 @@ class ConditionalNode(BaseNode[SHState]):
 
         try:
             # Get tool descriptions
-            logger.debug("🔧 Getting tool descriptions...")
             tools_description = generate_tools_description(get_available_tools(state.session_id))
-            logger.debug("✅ Tool descriptions retrieved")
 
             # Build prompt
-            logger.debug("🔧 Building conditional judgment prompt...")
-
             # Serialize Pydantic objects to JSON
             def serialize_pydantic_list(obj_list):
                 if not obj_list:
@@ -65,13 +65,11 @@ class ConditionalNode(BaseNode[SHState]):
                 user_plan=serialize_pydantic_list(state.plan),
                 steps=serialize_pydantic_list(state.steps),
                 execution_result=state.execution_results,
-                # message_history=state.message_history,
                 tools_description=tools_description,
                 thoughts=state.thoughts,
                 format_instructions=conditional_output_parser.get_format_instructions(),
                 domElement=state.current_a11ytree,
             )
-            logger.debug("✅ Conditional judgment prompt built successfully")
 
             # Call LLM
             response = await llm.ainvoke(prompt)
@@ -82,12 +80,8 @@ class ConditionalNode(BaseNode[SHState]):
                 content = await content
             raw = str(content or "")
 
-            logger.debug(f"🤖 LLM response length: {len(raw)} characters")
-
             # Parse output
-            logger.debug("🔧 Parsing conditional judgment output...")
             conditional_output = conditional_output_parser.parse(raw)
-            logger.debug("✅ Conditional judgment output parsed successfully")
 
             # Extract results
             done = conditional_output.done or False
@@ -104,8 +98,6 @@ class ConditionalNode(BaseNode[SHState]):
                 action_params = action_params_obj or {}
 
             logger.info(f"🎯 Conditional judgment result: done={done}, next={next_action}")
-            if reasoning:
-                logger.debug(f"💭 Reasoning process: {reasoning}")
 
             return {
                 "done": done,

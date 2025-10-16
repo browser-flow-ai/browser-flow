@@ -24,7 +24,7 @@ class SHGraph(BaseGraph):
 
     @property
     def description(self):
-        return "A simple Graph with StageHand support"
+        return "A Standard Graph with StageHand support"
 
     def build(self) -> StateGraph:
         workflow = StateGraph(SHState)

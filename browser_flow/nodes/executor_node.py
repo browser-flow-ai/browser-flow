@@ -4,19 +4,12 @@ import os
 from browser_flow.flow_types import plan_output_parser, Plan
 from browser_flow.flow_types.sh_graph_state import SHState
 from browser_flow.nodes.base import BaseNode
-from dotenv import load_dotenv
 
 from browser_flow.utils.tools_registry import get_tool_by_name
-
-load_dotenv()
-
-if os.getenv("DASHSCOPE_API_KEY"):
-    from browser_common.llm.llm_qwen import llm
-else:
-    from browser_common.llm.llm_deepseek import llm
-
 from browser_common.browser_logging import get_logger
+
 logger = get_logger("browser_flow.executor_node", enable_file_logging=False)
+
 
 class ExecutorNode(BaseNode[SHState]):
     def __init__(self, tools=None):
@@ -28,14 +21,13 @@ class ExecutorNode(BaseNode[SHState]):
 
     async def execute(self, state: SHState) -> dict:
         action = state.next_action or "done"
+        logger.info(f"Execution node is starting: {action}")
 
         if state.done or action == "done":
-            logger.info("⏹️ Workflow completed, skipping execution")
+            logger.info("Workflow completed, skipping execution")
             return {"done": True}
 
-        logger.info(f"Action Tool and Action parameters:{action} {state.action_params}")
         # Find tool
-        logger.debug(f"🔧 Looking for tool: {action}")
         tool = get_tool_by_name(state.session_id, action)
         if not tool:
             error_msg = f"No callable tool found: {action},{state.action_params}"
@@ -51,32 +43,22 @@ class ExecutorNode(BaseNode[SHState]):
         # Handle both dict and Pydantic model cases
         if hasattr(action_params, 'model_dump'):
             # Pydantic model
-            # fn = getattr(action_params, "function_name", None)
             params = getattr(action_params, "parameters", action_params.model_dump()) if hasattr(action_params,
                                                                                                  "parameters") else action_params.model_dump()
         else:
             # Regular dict
-            # fn = action_params.get("function_name") if action_params else None
             params = action_params.get("parameters") if action_params and "parameters" in action_params else (
-                        action_params or {})
-
-        logger.debug(f"📋 Final parameters: {params}")
+                    action_params or {})
 
         # Execute tool
         exe_result = None
         if tool:
             try:
-                logger.info(f"🚀 Starting tool execution: {action}")
-
                 exe_result = await tool.ainvoke(params)
                 exe_result = await exe_result if hasattr(exe_result, '__await__') else exe_result
-
-                logger.info(f"✅ Tool execution successful: {action}")
-                logger.debug(f"📊 Execution result: {exe_result}")
-
             except Exception as e:
                 error_msg = f"Tool execution failed: {str(e)}"
-                logger.error(f"❌ {error_msg}, {action},{state.action_params}")
+                logger.error(f"{error_msg}, {action},{state.action_params}")
                 exe_result = {"error": error_msg}
 
         # Create step record
@@ -86,8 +68,6 @@ class ExecutorNode(BaseNode[SHState]):
             id=(len(state.steps or []) if state.steps else 0) + 1,
             description=""
         )
-
-        logger.info(f"📝 Recording execution step: {step.action} (ID: {step.id})")
 
         current_a11ytree = exe_result.get("current_a11ytree")
         others = {k: v for k, v in exe_result.items() if k != "current_a11ytree"}

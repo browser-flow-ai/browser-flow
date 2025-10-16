@@ -6,6 +6,7 @@ from browser_flow.handlers.base import BaseHandler
 
 logger = get_logger("browser_flow.handlers.browser_handlers", enable_file_logging=False)
 
+
 class ActHandler(BaseHandler):
     def __init__(self, hand: AgentHand):
         self._hand = hand
@@ -17,7 +18,8 @@ class ActHandler(BaseHandler):
     @property
     def description(self) -> str:
         return """
-        act one step action in the browser
+        For interacting with pages (clicking, inputting, navigating, etc.).
+        Execute an action on the page. Use this function to interact with elements, such as clicking buttons, entering text, or navigating. Please do not combine two actions together, such as: entering [email] in the email input box and then pressing enter. They should be performed sequentially: 'Enter [email] in the email input box', 'Press enter in the email input box'.
         """
 
     async def execute(self, action: str = None) -> Any:
@@ -82,6 +84,7 @@ class ExtractHandler(BaseHandler):
                 "result": f"Extraction failed: {str(e)}",
                 "current_a11ytree": current_a11ytree,
             }
+
 
 class GotoHandler(BaseHandler):
     def __init__(self, hand: AgentHand):
@@ -188,6 +191,7 @@ class RefreshHandler(BaseHandler):
             "result": "Successfully refreshed the page",
             "current_a11ytree": current_a11ytree,
         }
+
 
 class CloseHandler(BaseHandler):
     def __init__(self, hand: AgentHand):
