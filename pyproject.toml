@@ -23,7 +23,7 @@ classifiers = [
 requires-python = ">=3.10,<4.0"
 dependencies = [
     "playwright>=1.40.0",
-    "requests>=2.25.0",
+    "requests>=2.28.0",
     "pydantic>=2.0.0",
     "httpx>=0.28.1",
     "aiofiles>=23.0.0",
@@ -50,6 +50,13 @@ dependencies = [
     "pytest-asyncio>=0.21.0",
     "trafilatura[all] (>=2.0.0,<3.0.0)",
     "bs4 (>=0.0.2,<0.0.3)",
+    # 云南招聘信息智能问答系统额外依赖
+    "pandas>=1.5.0",  # 数据处理
+    "openpyxl>=3.0.0",  # Excel文件支持
+    "PyPDF2>=3.0.0",  # PDF文件支持
+    "python-docx>=0.8.11",  # Word文件支持
+    "faiss-cpu>=1.7.0",  # 向量数据库（CPU版本）
+    "scikit-learn>=1.1.0",  # 机器学习（用于SimpleEmbeddings降级方案）
 ]
 
 [project.scripts]

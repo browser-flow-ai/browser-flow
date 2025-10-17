@@ -34,9 +34,9 @@ class BrowserFlow:
             The result of the workflow execution
         """
         try:
-            logger.info(f"🚀 Starting BrowserFlow execution for session: {self.session_id}")
-            logger.info(f"📝 Instruction: {instruction}")
-            logger.info(f"⏳ Max steps: {max_steps}")
+            logger.info(f"Starting BrowserFlow execution for session: {self.session_id}")
+            logger.info(f"Instruction: {instruction}")
+            logger.info(f"Max steps: {max_steps}")
 
             # Get graph instance
             self._graph = await get_runnable_by_session(self.session_id)
@@ -45,14 +45,14 @@ class BrowserFlow:
             initial_state = create_initial_state(self.session_id, instruction, max_steps)
 
             # Execute workflow
-            logger.info("🔄 Executing workflow...")
+            logger.info("Executing workflow...")
             result = await self._graph.ainvoke(initial_state)
 
-            logger.info("✅ Workflow execution completed successfully")
+            logger.info("Workflow execution completed successfully")
             return result
 
         except Exception as error:
-            logger.error(f"❌ Workflow execution failed: {error}")
+            logger.error(f"Workflow execution failed: {error}")
             raise
         finally:
             # Cleanup resources
@@ -62,11 +62,11 @@ class BrowserFlow:
         """Clean up browser resources."""
         try:
             if self.session_id:
-                logger.info("🗑️ Cleaning up browser resources...")
+                logger.info("Cleaning up browser resources...")
                 await dispose_session(self.session_id)
-                logger.info("✅ Browser resources cleanup completed")
+                logger.info("Browser resources cleanup completed")
         except Exception as cleanup_error:
-            logger.warning(f"⚠️ Warning during resource cleanup: {cleanup_error}")
+            logger.warning(f"Warning during resource cleanup: {cleanup_error}")
 
     async def close(self):
         """Manually close and cleanup resources."""
